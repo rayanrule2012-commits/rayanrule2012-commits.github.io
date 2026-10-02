@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Social Network</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #f0f2f5; color: #1c1e21; display: flex; justify-content: center; padding: 20px; }
+    .feed-container { width: 100%; max-width: 550px; }
+    .header { background: #ffffff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; }
+    .post-creator { background: #ffffff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .post-creator textarea { width: 100%; height: 80px; border: 1px solid #ddd; border-radius: 6px; padding: 10px; resize: none; font-size: 14px; }
+    .post-creator button { background: #1877f2; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; float: right; margin-top: 10px; }
+    .post-creator button:hover { background: #166fe5; }
+    .post { background: #ffffff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; }
+    .post-author { font-weight: bold; margin-bottom: 8px; color: #050505; }
+    .post-content { margin-bottom: 12px; font-size: 15px; line-height: 1.4; }
+    .post-actions { border-top: 1px solid #eee; pt: 10px; padding-top: 10px; display: flex; gap: 12px; }
+    .action-btn { background: none; border: none; color: #65676b; font-weight: 600; cursor: pointer; padding: 6px 12px; border-radius: 4px; }
+    .action-btn:hover { background: #f2f2f2; }
+    .action-btn.liked { color: #e41e3f; }
+  </style>
+</head>
+<body>
+
+  <div class="feed-container">
+    <div class="header">
+      <h2>🌐 Community Feed</h2>
+    </div>
+
+    <!-- Create Post Box -->
+    <div class="post-creator">
+      <textarea id="postInput" placeholder="What's on your mind?"></textarea>
+      <button onclick="addPost()">Post</button>
+      <div style="clear: both;"></div>
+    </div>
+
+    <!-- Live Post Feed -->
+    <div id="feed">
+      <!-- Default Example Post -->
+      <div class="post">
+        <div class="post-author">Alex Developer</div>
+        <div class="post-content">Welcome to my new social network! Leave a comment or create a post below. 🚀</div>
+        <div class="post-actions">
+          <button class="action-btn" onclick="toggleLike(this)">❤️ <span class="count">0</span> Likes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function addPost() {
+      const input = document.getElementById('postInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const feed = document.getElementById('feed');
+      const newPost = document.createElement('div');
+      newPost.className = 'post';
+      newPost.innerHTML = `
+        <div class="post-author">You</div>
+        <div class="post-content">${escapeHtml(text)}</div>
+        <div class="post-actions">
+          <button class="action-btn" onclick="toggleLike(this)">❤️ <span class="count">0</span> Likes</button>
+        </div>
+      `;
+
+      feed.prepend(newPost);
+      input.value = '';
+    }
+
+    function toggleLike(btn) {
+      const countSpan = btn.querySelector('.count');
+      let count = parseInt(countSpan.textContent);
+      
+      if (btn.classList.contains('liked')) {
+        btn.classList.remove('liked');
+        countSpan.textContent = count - 1;
+      } To build a social media site where users can interact, **JavaScript (HTML/CSS/JS)** is much easier to start with than Java, especially for hosting completely for free.
+
+Below is a complete, ready-to-use prototype containing a full social feed with interactive **Like buttons**, **Comment sections**, and a **Post Creation form**.
+
+---
+
+### Step 1: Create Your Single-File Social Media App
+
+Create a file named `index.html` on your computer and paste the code below into it:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Social Network</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+    .feed-container { width: 100%; max-width: 550px; }
+    
+    /* Header */
+    .header { background: #ffffff; padding: 15px; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; color: #1877f2; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 15px; }
+
+    /* Post Creation Box */
+    .create-post { background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .create-post textarea { width: 100%; height: 70px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: none; outline: none; }
+    .create-post button { background: #1877f2; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; float: right; margin-top: 8px; }
+
+    /* Post Cards */
+    .post-card { background: #ffffff; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .post-author { font-weight: bold; color: #333; margin-bottom: 8px; }
+    .post-text { color: #1c1e21; line-height: 1.4; margin-bottom: 12px; }
+    
+    /* Actions */
+    .post-actions { border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 8px 0; display: flex; gap: 10px; }
+    .action-btn { background: none; border: none; color: #65676b; font-weight: 600; cursor: pointer; padding: 5px 10px; border-radius: 4px; }
+    .action-btn.liked { color: #1877f2; }
+
+    /* Comments */
+    .comment-section { margin-top: 10px; }
+    .comment-list { font-size: 14px; margin-bottom: 10px; }
+    .comment-item { background: #f0f2f5; padding: 6px 10px; border-radius: 12px; margin-top: 5px; }
+    .comment-input-box { display: flex; gap: 8px; }
+    .comment-input-box input { flex: 1; padding: 6px 10px; border: 1px solid #ccc; border-radius: 15px; outline: none; }
+    .comment-input-box button { background: #1877f2; color: white; border: none; padding: 6px 12px; border-radius: 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<div class="feed-container">
+  <div class="header">My Social Feed</div>
+
+  <!-- Create Post Form -->
+  <div class="create-post">
+    <textarea id="postInput" placeholder="What's on your mind?"></textarea>
+    <button onclick="createPost()">Post</button>
+    <div style="clear: both;"></div>
+  </div>
+
+  <!-- Post Stream -->
+  <div id="postFeed"></div>
+</div>
+
+<script>
+  // Initial posts array
+  let posts = [
+    {
+      id: 1,
+      author: "Alex",
+      content: "Welcome to my new interactive social website!",
+      likes: 3,
+      liked: false,
+      comments: ["Looks clean!", "Congrats on launching!"]
+    }
+  ];
+
+  function renderFeed() {
+    const feed = document.getElementById('postFeed');
+    feed.innerHTML = '';
+
+    posts.forEach((post, index) => {
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.innerHTML = `
+        <div class="post-author">${post.author}</div>
+        <div class="post-text">${post.content}</div>
+        <div class="post-actions">
+          <button class="action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${index})">
+            👍 ${post.likes} Likes
+          </button>
+        </div>
+        <div class="comment-section">
+          <div class="comment-list">
+            ${post.comments.map(c => `<div class="comment-item">${c}</div>`).join('')}
+          </div>
+          <div class="comment-input-box">
+            <input type="text" id="comment-input-${index}" placeholder="Write a comment...">
+            <button onclick="addComment(${index})">Send</button>
+          </div>
+        </div>
+      `;
+      feed.appendChild(card);
+    });
+  }
+
+  function createPost() {
+    const input = document.getElementById('postInput');
+    if (!input.value.trim()) return;
+
+    posts.unshift({
+      id: Date.now(),
+      author: "You",
+      content: input.value,
+      likes: 0,
+      liked: false,
+      comments: []
+    });
+
+    input.value = '';
+    renderFeed();
+  }
+
+  function toggleLike(index) {
+    if (posts[index].liked) {
+      posts[index].likes--;
+      posts[index].liked = false;
+    } else {
+      posts[index].likes++;
+      posts[index].liked = true;
+    }
+    renderFeed();
+  }
+
+  function addComment(index) {
+    const input = document.getElementById(`comment-input-${index}`);
+    if (!input.value.trim()) return;
+
+    posts[index].comments.push(input.value);
+    input.value = '';
+    renderFeed();
+  }
+
+  // Load feed on startup
+  renderFeed();
+</script>
+
+</body>
+</html>
